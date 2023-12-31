@@ -1,20 +1,34 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import userRoutes from './src/routes/userRoutes.js'
+import { routes } from './src/routes/index.js';
 import { errorMiddleWare } from './src/middleware/error.middleware.js';
 import dotenv from 'dotenv';
 
-dotenv.config(); 
+dotenv.config();
 
-const app = express();
-app.use(bodyParser.json());
+class Server {
+  constructor() {
+    this.app = express();
+    this.configureMiddleware();
+    this.configureRoutes();
+    this.startServer();
+  }
 
-// Routes
-app.use('/', userRoutes);
-app.use(errorMiddleWare);
+  configureMiddleware() {
+    this.app.use(express.json());
+  }
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  configureRoutes() {
+    this.app.use('/', routes);
+    // this.app.use(errorMiddleWare);
+  }
+
+  startServer() {
+    const PORT = process.env.PORT || 3000;
+    this.app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  }
+}
+
+// Create an instance of the Server class to start the server
+const server = new Server();

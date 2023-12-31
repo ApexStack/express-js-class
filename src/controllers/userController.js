@@ -1,31 +1,33 @@
-import userService from "../services/userService.js";
+import UserService from "../services/userService.js";
 
-const userController = {
-  getUser: (req, res) => {
-    console.log("I am called");
-    const userId = req.params.id;
-    const user = userService.getUser(userId);
+class UserController {
+  constructor() {
+    this.userService = new UserService();
+  }
+
+  getUser = (req, res) => {
+    const user = this.userService.getUser(req.params.id);
     res.json(user);
-  },
+  };
 
-  createUser: (req, res) => {
+  createUser = (req, res) => {
     const { username, email } = req.body;
-    const newUser = userService.createUser(username, email);
+    const newUser = this.userService.createUser(username, email);
     res.status(201).json(newUser);
-  },
+  };
 
-  updateUser: (req, res) => {
-    const userId = req.params.id;
+  updateUser = (req, res) => {
+    const { id } = req.params;
     const { username, email } = req.body;
-    const updatedUser = userService.updateUser(userId, username, email);
+    const updatedUser = this.userService.updateUser(id, username, email);
     res.json(updatedUser);
-  },
+  };
 
-  deleteUser: (req, res) => {
-    const userId = req.params.id;
-    userService.deleteUser(userId);
+  deleteUser = (req, res) => {
+    const { id } = req.params;
+    this.userService.deleteUser(id);
     res.sendStatus(204);
-  },
-};
+  };
+}
 
-export default userController;
+export default UserController;
