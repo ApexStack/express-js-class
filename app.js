@@ -2,6 +2,7 @@ import express from 'express';
 import { routes } from './src/routes/index.js';
 import { errorMiddleWare } from './src/middleware/error.middleware.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -15,11 +16,12 @@ class Server {
 
   configureMiddleware() {
     this.app.use(express.json());
+    this.app.use(cors());
   }
 
   configureRoutes() {
     this.app.use('/', routes);
-    // this.app.use(errorMiddleWare);
+    this.app.use(errorMiddleWare);
   }
 
   startServer() {
